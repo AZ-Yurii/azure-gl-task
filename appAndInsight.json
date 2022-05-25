@@ -1,0 +1,132 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "subscriptionId": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "Specify the location for the resources."
+      }
+    },
+    "hostingPlanName": {
+      "type": "string"
+    },
+    "serverFarmResourceGroup": {
+      "type": "string"
+    },
+    "alwaysOn": {
+      "type": "bool"
+    },
+    "ftpsState": {
+      "type": "string"
+    },
+    "sku": {
+      "type": "string"
+    },
+    "skuCode": {
+      "type": "string"
+    },
+    "workerSize": {
+      "type": "string"
+    },
+    "workerSizeId": {
+      "type": "string"
+    },
+    "numberOfWorkers": {
+      "type": "string"
+    },
+    "linuxFxVersion": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "insightName": "[concat('appi-', parameters('name'))]",
+    "appName": "[concat('app-', parameters('name'))]",
+    "serverfarmName": "[concat('plan-', parameters('name'))]"
+  },
+  "resources": [
+    {
+      "apiVersion": "2018-11-01",
+      "name": "[variables('appName')]",
+      "type": "Microsoft.Web/sites",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[format('microsoft.insights/components/{0}', variables('insightName'))]",
+        "[concat('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]"
+      ],
+      "properties": {
+        "name": "[variables('appName')]",
+        "siteConfig": {
+          "appSettings": [
+            {
+              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+              "value": "[reference(format('microsoft.insights/components/{0}', '2015-05-01'), variables('insightName')).InstrumentationKey]"
+            },
+            {
+              "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+              "value": "[reference(format('microsoft.insights/components/{0}', '2015-05-01'), variables('insightName')).ConnectionString]"
+            },
+            {
+              "name": "ApplicationInsightsAgent_EXTENSION_VERSION",
+              "value": "~3"
+            },
+            {
+              "name": "XDT_MicrosoftApplicationInsights_Mode",
+              "value": "default"
+            }
+          ],
+          "linuxFxVersion": "[parameters('linuxFxVersion')]",
+          "alwaysOn": "[parameters('alwaysOn')]",
+          "ftpsState": "[parameters('ftpsState')]"
+        },
+        "serverFarmId": "[concat('/subscriptions/', parameters('subscriptionId'),'/resourcegroups/', parameters('serverFarmResourceGroup'), '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]",
+        "clientAffinityEnabled": false,
+        "virtualNetworkSubnetId": null,
+        "httpsOnly": false
+      }
+    },
+    {
+      "apiVersion": "2018-11-01",
+      "name": "[variables('serverfarmName')]",
+      "type": "Microsoft.Web/serverfarms",
+      "location": "[parameters('location')]",
+      "kind": "linux",
+      "dependsOn": [],
+      "properties": {
+        "name": "[variables('serverfarmName')]",
+        "workerSize": "[parameters('workerSize')]",
+        "workerSizeId": "[parameters('workerSizeId')]",
+        "numberOfWorkers": "[parameters('numberOfWorkers')]",
+        "reserved": true,
+        "zoneRedundant": false
+      },
+      "sku": {
+        "Tier": "[parameters('sku')]",
+        "Name": "[parameters('skuCode')]"
+      }
+    },
+    {
+      "apiVersion": "2020-02-02",
+      "name": "[variables('insightName')]",
+      "type": "microsoft.insights/components",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "newWorkspaceTemplate"
+      ],
+      "properties": {
+        "ApplicationId": "[parameters('name')]",
+        "Request_Source": "IbizaWebAppExtensionCreate",
+        "Flow_Type": "Redfield",
+        "Application_Type": "web",
+        "WorkspaceResourceId": "/subscriptions/dee419d6-7138-4d4a-9d5a-64485bfaac29/resourceGroups/DefaultResourceGroup-WEU/providers/Microsoft.OperationalInsights/workspaces/DefaultWorkspace-dee419d6-7138-4d4a-9d5a-64485bfaac29-WEU"
+      }
+    }
+  ]
+}

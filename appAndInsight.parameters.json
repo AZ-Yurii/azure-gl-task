@@ -1,0 +1,45 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "name": {
+      "value": "web-test-interview"
+    },
+    "serverFarmResourceGroup": {
+      "value": "testTaskGroup"
+    },
+    "alwaysOn": {
+      "value": false
+    },
+    "ftpsState": {
+      "value": "AllAllowed"
+    },
+    "sku": {
+      "value": "Free"
+    },
+    "skuCode": {
+      "value": "F1"
+    },
+    "workerSize": {
+      "value": "0"
+    },
+    "workerSizeId": {
+      "value": "0"
+    },
+    "numberOfWorkers": {
+      "value": "1"
+    },
+    "linuxFxVersion": {
+      "value": "DOTNETCORE|6.0"
+    },
+    "subscriptionId": {
+      "value": "dee419d6-7138-4d4a-9d5a-64485bfaac29"
+    },
+    "location": {
+      "value": "Central US"
+    },
+    "hostingPlanName": {
+        "value": "App-planTest"
+    }
+  }
+}

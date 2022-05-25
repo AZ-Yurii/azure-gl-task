@@ -1,97 +1,24 @@
 {
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
-  "parameters": {
-    "location": {
-      "type": "string",
-      "defaultValue": "[resourceGroup().location]",
-      "metadata":{
-        "description": "Specify the location for the resources."
-      }
-    },
-    "subscriptionId": {
-      "type": "string"
-    },
-    "app-name": {
-      "type": "string"
-    },
-    "app-hostingPlanName": {
-      "type": "string"
-    },
-    "app-serverFarmResourceGroup": {
-      "type": "string"
-    },
-    "app-alwaysOn": {
-      "type": "bool"
-    },
-    "app-linuxFxVersion": {
-      "type": "string"
-    }
-  },
-  "variables": {
-    "appServicePlanName": "[concat('plan', uniquestring(resourceGroup().id))]"
-  },
+  "parameters": {},
+  "variables": {},
   "resources": [
     {
-      "type": "Microsoft.Web/serverfarms",
-      "apiVersion": "2021-03-01",
-      "name": "[variables('appServicePlanName')]",
-      "location": "[parameters('location')]",
-      "sku": {
-        "name": "F1",
-        "tier": "Free",
-        "size": "F1",
-        "family": "F",
-        "capacity": 1
-      },
-      "kind": "linux",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-10-01",
+      "name": "createAppAndInsight",
       "properties": {
-      "perSiteScaling": false,
-      "elasticScaleEnabled": false,
-      "maximumElasticWorkerCount": 1,
-      "isSpot": false,
-      "reserved": true,
-      "isXenon": false,
-      "hyperV": false,
-      "targetWorkerCount": 0,
-      "targetWorkerSizeId": 0,
-      "zoneRedundant": false
-      }
-    },
-    {
-      "type": "Microsoft.Web/sites",
-      "apiVersion": "2021-03-01",
-      "name": "[parameters('app-name')]",
-      "location": "[parameters('location')]",
-      "properties": {
-        "siteConfig": {
-          "appSettings": [
-            {
-              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-              "value": "[reference(format('microsoft.insights/components/{0}', '2015-05-01'), parameters('app-name')).InstrumentationKey]"
-            },
-            {
-              "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-              "value": "[reference(format('microsoft.insights/components/{0}', '2015-05-01'), parameters('app-name')).ConnectionString]"
-            },
-            {
-              "name": "ApplicationInsightsAgent_EXTENSION_VERSION",
-              "value": "~2"
-            },
-            {
-              "name": "XDT_MicrosoftApplicationInsights_Mode",
-              "value": "default"
-            }
-          ],
-          "linuxFxVersion": "[parameters('app-linuxFxVersion')]",
-          "alwaysOn": "[parameters('app-alwaysOn')]"
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "https://raw.githubusercontent.com/AZ-Yurii/azure-gl-task/main/appAndInsight.json",
+          "contentVersion":"1.0.0.0"
         },
-        "serverFarmId": "[format('/subscriptions/{0}/resourcegroups/{1}/providers/Microsoft.Web/serverfarms/{2}', parameters('subscriptionId'), parameters('app-serverFarmResourceGroup'), parameters('app-hostingPlanName'))]",
-        "clientAffinityEnabled": false
-      },
-      "dependsOn": [
-        "[resourceId(format('Microsoft.Insights/components', '{0}'), parameters('app-name'))]"
-      ]
+        "parametersLink": {
+          "uri": "https://raw.githubusercontent.com/AZ-Yurii/azure-gl-task/main/appAndInsight.parameters.json",
+          "contentVersion":"1.0.0.0"
+        }
+      }
     },
     {
       "type": "Microsoft.Resources/deployments",
@@ -107,17 +34,6 @@
           "uri": "https://raw.githubusercontent.com/AZ-Yurii/azure-gl-task/main/storageAccount.parameters.json",
           "contentVersion":"1.0.0.0"
         }
-      }
-    },
-    {
-      "type": "Microsoft.Insights/components",
-      "apiVersion": "2020-02-02",
-      "name": "[parameters('app-name')]",
-      "location": "[parameters('location')]",
-      "kind": "web",
-      "properties": {
-        "Application_Type": "web",
-        "Request_Source": "rest"
       }
     }
   ]
