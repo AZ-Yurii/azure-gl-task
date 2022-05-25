@@ -4,7 +4,7 @@
   "parameters": {
     "location": {
       "type": "string",
-      "defaultValue": "West Europe",
+      "defaultValue": "Central US",
       "metadata": {
         "description": "Specify a location for the resources."
       }

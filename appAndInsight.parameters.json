@@ -6,7 +6,7 @@
       "value": "web-test-interview"
     },
     "serverFarmResourceGroup": {
-      "value": "testTaskGroup"
+      "value": "interviewTestApp"
     },
     "alwaysOn": {
       "value": false
@@ -37,9 +37,6 @@
     },
     "location": {
       "value": "Central US"
-    },
-    "hostingPlanName": {
-        "value": "App-planTest"
     }
   }
 }

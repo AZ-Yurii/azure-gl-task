@@ -15,9 +15,6 @@
         "description": "Specify the location for the resources."
       }
     },
-    "hostingPlanName": {
-      "type": "string"
-    },
     "serverFarmResourceGroup": {
       "type": "string"
     },
@@ -59,7 +56,7 @@
       "location": "[parameters('location')]",
       "dependsOn": [
         "[format('microsoft.insights/components/{0}', variables('insightName'))]",
-        "[concat('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]"
+        "[concat('Microsoft.Web/serverfarms/', variables('serverfarmName'))]"
       ],
       "properties": {
         "name": "[variables('appName')]",
@@ -86,7 +83,7 @@
           "alwaysOn": "[parameters('alwaysOn')]",
           "ftpsState": "[parameters('ftpsState')]"
         },
-        "serverFarmId": "[concat('/subscriptions/', parameters('subscriptionId'),'/resourcegroups/', parameters('serverFarmResourceGroup'), '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]",
+        "serverFarmId": "[concat('/subscriptions/', parameters('subscriptionId'),'/resourcegroups/', parameters('serverFarmResourceGroup'), '/providers/Microsoft.Web/serverfarms/', variables('serverfarmName'))]",
         "clientAffinityEnabled": false,
         "virtualNetworkSubnetId": null,
         "httpsOnly": false
