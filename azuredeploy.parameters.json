@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "storageAccountType": {
+      "value": "Standard_LRS"
+    },
+    "location": {
+      "value": "West Europe"
+    },
+    "subscriptionId": {
+        "value": "dee419d6-7138-4d4a-9d5a-64485bfaac29"
+    },
+    "app-name": {
+        "value": "app-web-test"
+    },
+    "app-hostingPlanName": {
+        "value": "app-plantest"
+    },
+    "app-serverFarmResourceGroup": {
+        "value": "testTaskGroup"
+    },
+    "app-alwaysOn": {
+        "value": false
+    },
+    "app-linuxFxVersion": {
+        "value": "NODE|12-lts"
+    }
+  }
+}
