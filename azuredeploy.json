@@ -4,16 +4,9 @@
   "parameters": {
     "location": {
       "type": "string",
-      "defaultValue": "West Europe",
+      "defaultValue": "[resourceGroup().location]",
       "metadata":{
         "description": "Specify the location for the resources."
-      }
-    },
-    "storageAccountType": {
-      "type": "string",
-      "defaultValue": "Standard_LRS",
-      "metadata":{
-        "description": "Specify the storage account type."
       }
     },
     "subscriptionId": {
@@ -107,15 +100,12 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "relativePath": "linkedStorageAccount.json"
+          "uri": "https://raw.githubusercontent.com/AZ-Yurii/azure-gl-task/main/storageAccount.json",
+          "contentVersion":"1.0.0.0"
         },
-        "parameters": {
-          "storageAccountType": {
-            "value": "[parameters('storageAccountType')]"
-          },
-          "location": {
-              "value": "[parameters('location')]"
-          }
+        "parametersLink": {
+          "uri": "https://raw.githubusercontent.com/AZ-Yurii/azure-gl-task/main/storageAccount.parameters.json",
+          "contentVersion":"1.0.0.0"
         }
       }
     },
