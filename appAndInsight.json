@@ -117,16 +117,10 @@
       "name": "[variables('insightName')]",
       "type": "microsoft.insights/components",
       "location": "[parameters('location')]",
-      "dependsOn": [
-        "newWorkspaceTemplate"
-      ],
       "properties": {
         "ApplicationId": "[parameters('name')]",
-        "Request_Source": "IbizaWebAppExtensionCreate",
-        "Flow_Type": "Redfield",
-        "Application_Type": "web",
-        "WorkspaceResourceId": "/subscriptions/dee419d6-7138-4d4a-9d5a-64485bfaac29/resourceGroups/DefaultResourceGroup-WEU/providers/Microsoft.OperationalInsights/workspaces/DefaultWorkspace-dee419d6-7138-4d4a-9d5a-64485bfaac29-WEU"
-      }
+        "Application_Type": "web"
+       }
     }
   ]
 }
