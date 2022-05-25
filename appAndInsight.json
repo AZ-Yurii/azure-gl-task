@@ -3,44 +3,77 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "subscriptionId": {
-      "type": "string"
+      "type": "string",
+      "metadata": {
+        "description": "Specify your Subscription ID."
+      }
     },
     "name": {
-      "type": "string"
+      "type": "string",
+      "metadata": {
+        "description": "Name of Application Insights resource."
+      }
     },
     "location": {
       "type": "string",
       "defaultValue": "[resourceGroup().location]",
       "metadata": {
-        "description": "Specify the location for the resources."
+        "description": "Which Azure Region to deploy the resource to. This must be a valid Azure regionId."
       }
     },
     "serverFarmResourceGroup": {
-      "type": "string"
+      "type": "string",
+      "metadata": {
+        "description": "Your serverFarm resourceGroup."
+      }
     },
     "alwaysOn": {
-      "type": "bool"
+      "type": "bool",
+      "metadata": {
+        "description": "true if Always On is enabled; otherwise, false."
+      }
     },
     "ftpsState": {
-      "type": "string"
+      "type": "string",
+      "metadata": {
+        "description": "Disable or Enable FTP access for your app."
+      }
     },
     "sku": {
-      "type": "string"
+      "type": "string",
+      "metadata": {
+        "description": "Your Azure Pricing Tier."
+      }
     },
     "skuCode": {
-      "type": "string"
+      "type": "string",
+      "metadata": {
+        "description": "Your Azure Pricing Tier shortname."
+      }
     },
     "workerSize": {
-      "type": "string"
+      "type": "string",
+      "metadata": {
+        "description": "VM size of the worker pool instances."
+      }
     },
     "workerSizeId": {
-      "type": "string"
+      "type": "string",
+      "metadata": {
+        "description": "Worker size ID for referencing the worker pool."
+      }
     },
     "numberOfWorkers": {
-      "type": "string"
+      "type": "string",
+      "metadata": {
+        "description": "Number of workers in the pool."
+      }
     },
     "linuxFxVersion": {
-      "type": "string"
+      "type": "string",
+      "metadata": {
+        "description": "Linux App Framework and version."
+      }
     }
   },
   "variables": {
@@ -55,7 +88,7 @@
       "type": "Microsoft.Web/sites",
       "location": "[parameters('location')]",
       "dependsOn": [
-        "[format('microsoft.insights/components/{0}', variables('insightName'))]",
+        "[concat('microsoft.insights/components/', variables('insightName'))]",
         "[concat('Microsoft.Web/serverfarms/', variables('serverfarmName'))]"
       ],
       "properties": {
@@ -64,11 +97,11 @@
           "appSettings": [
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-              "value": "[reference(format('microsoft.insights/components/{0}', '2015-05-01'), variables('insightName')).InstrumentationKey]"
+              "value": "[reference(concat('microsoft.insights/components/', variables('insightName')), '2015-05-01').InstrumentationKey]"
             },
             {
               "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-              "value": "[reference(format('microsoft.insights/components/{0}', '2015-05-01'), variables('insightName')).ConnectionString]"
+              "value": "[reference(concat('microsoft.insights/components/', variables('insightName')), '2015-05-01').ConnectionString]"
             },
             {
               "name": "ApplicationInsightsAgent_EXTENSION_VERSION",
