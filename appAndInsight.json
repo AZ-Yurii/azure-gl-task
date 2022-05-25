@@ -55,7 +55,7 @@
       "type": "Microsoft.Web/sites",
       "location": "[parameters('location')]",
       "dependsOn": [
-        "[format('microsoft.insights/components/{0}', variables('insightName'))]",
+        "[concat('microsoft.insights/components/', variables('insightName'))]",
         "[concat('Microsoft.Web/serverfarms/', variables('serverfarmName'))]"
       ],
       "properties": {
@@ -64,11 +64,11 @@
           "appSettings": [
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-              "value": "[reference(format('microsoft.insights/components/{0}', '2015-05-01'), variables('insightName')).InstrumentationKey]"
+              "value": "[reference(concat('microsoft.insights/components/', variables('insightName')), '2015-05-01').InstrumentationKey]"
             },
             {
               "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-              "value": "[reference(format('microsoft.insights/components/{0}', '2015-05-01'), variables('insightName')).ConnectionString]"
+              "value": "[reference(concat('microsoft.insights/components/', variables('insightName')), '2015-05-01').ConnectionString]"
             },
             {
               "name": "ApplicationInsightsAgent_EXTENSION_VERSION",
