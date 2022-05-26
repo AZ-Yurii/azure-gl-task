@@ -9,16 +9,36 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  resourceGroupName: 'rg-interviewTestApp'
+  location: 'Central US'
+  azureResourceManagerConnection: 'interviewWebApp-conn'
+  subscriptionId: 'dee419d6-7138-4d4a-9d5a-64485bfaac29'
+
 steps:
 - task: AzureResourceManagerTemplateDeployment@3
   inputs:
     deploymentScope: 'Resource Group'
-    azureResourceManagerConnection: 'interviewWebApp-conn'
-    subscriptionId: 'dee419d6-7138-4d4a-9d5a-64485bfaac29'
+    azureResourceManagerConnection: $(azureResourceManagerConnection)
+    subscriptionId: $(subscriptionId)
     action: 'Create Or Update Resource Group'
-    resourceGroupName: 'interviewTestApp'
-    location: 'Central US'
+    resourceGroupName: $(resourceGroupName)
+    location: $(location)
+    templateLocation: 'URL of the file'
+    csmFileLink: 'https://raw.githubusercontent.com/AZ-Yurii/azure-gl-task/main/resourcegroup.json'
+    csmParametersFileLink: 'https://raw.githubusercontent.com/AZ-Yurii/azure-gl-task/main/resourcegroup.parameters.json'
+    deploymentMode: 'Complete'
+    deploymentName: 'resourceGroupCreation'
+
+- task: AzureResourceManagerTemplateDeployment@3
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: $(azureResourceManagerConnection)
+    subscriptionId: $(subscriptionId)
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: $(resourceGroupName)
+    location: $(location)
     templateLocation: 'URL of the file'
     csmFileLink: 'https://raw.githubusercontent.com/AZ-Yurii/azure-gl-task/main/azuredeploy.json'
-    deploymentMode: 'Incremental'
-    deploymentName: 'DeploymentPipelineTemplate'
+    deploymentMode: 'Complete'
+    deploymentName: 'DeploymentApplicationTemplate'
