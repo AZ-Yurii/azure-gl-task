@@ -1,0 +1,24 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: AzureResourceManagerTemplateDeployment@3
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: 'interviewWebApp-conn'
+    subscriptionId: 'dee419d6-7138-4d4a-9d5a-64485bfaac29'
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: 'interviewTestApp'
+    location: 'Central US'
+    templateLocation: 'URL of the file'
+    csmFileLink: 'https://raw.githubusercontent.com/AZ-Yurii/azure-gl-task/main/azuredeploy.json'
+    deploymentMode: 'Incremental'
+    deploymentName: 'DeploymentPipelineTemplate'
